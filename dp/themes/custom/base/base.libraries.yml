@@ -1,5 +1,0 @@
-global-styling:
-  versions: 1.x
-  css:
-    theme:
-      assets/build/css/style.css: {}
