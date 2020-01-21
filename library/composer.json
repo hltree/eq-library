@@ -1,0 +1,7 @@
+{
+    "name": "nnishida/facilities_library",
+    "description": "this is Library App",
+    "require": {
+        "slim/slim": "^4.3"
+    }
+}

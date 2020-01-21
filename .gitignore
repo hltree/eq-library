@@ -4,6 +4,8 @@ node_modules
 package-lock.json
 uploads
 
+# Composer
+vendor
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -232,3 +234,5 @@ dmypy.json
 .pyre/
 
 # End of https://www.gitignore.io/api/django
+
+/vendor/
