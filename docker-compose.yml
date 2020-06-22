@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  php:
+    container_name: php
+    image: php:7.2-apache
+    build: ./docker/php
+    volumes:
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+      - ./docker/php/000-default.conf:/etc/apache2/sites-available/000-default.conf
+      - ./data:/var/www/html
+    ports:
+      - 80:80
+    links:
+      - phpmyadmin
+      - mysql
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
+    env_file:
+      - .env
+    ports:
+      - 3306:3306
+    restart: always
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/mysql/sql:/docker-entrypoint-initdb.d
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - TZ='Asia/Tokyo'
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    env_file:
+      - .env
+    environment:
+      - PMA_ARBITARY=1
+      - PMA_HOST=mysql
+      - PMA_USER=${PHP_MY_ADMIN_USER}
+      - PMA_PASSWORD=${PHP_MY_ADMIN_PASSWORD}
+    links:
+      - mysql
+    ports:
+      - 8080:80
+    volumes:
+      - ./docker/phpmyadmin/upload.ini:/usr/local/etc/php/php.ini
+      - ./docker/phpmyadmin/sessions:/sessions
